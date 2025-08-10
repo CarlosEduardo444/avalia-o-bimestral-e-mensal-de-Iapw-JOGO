@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jogo do Alvo </title>
+<style>
+  body {
+    margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100vh;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  }
+  h1 {
+    margin-bottom: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffeaa7;
+    text-shadow: 2px 2px 6px #d35400;
+  }
+  #game-area {
+    position: relative;
+    width: 90vw; max-width: 600px; height: 70vh;
+    background: radial-gradient(circle at center, #1e3c72, #2a5298);
+    border-radius: 16px;
+    box-shadow: 0 0 25px #6a11cb;
+    overflow: hidden;
+    border: 3px solid #8e44ad;
+  }
+  #target {
+    position: absolute;
+    width: 50px; height: 50px;
+    background: radial-gradient(circle at 30% 30%, #ff4b1f, #ff9068);
+    border-radius: 50%;
+    box-shadow: 0 0 12px #ff4b1f, inset 0 0 10px #ff9068;
+    cursor: pointer;
+    user-select: none;
+    transition: top 0.3s ease, left 0.3s ease, transform 0.15s ease;
+  }
+  #target:active {
+    transform: scale(0.85);
+    box-shadow: 0 0 18px #ff9068, inset 0 0 14px #ff4b1f;
+  }
+  #scoreboard {
+    margin: 15px 0;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: #ffdd59;
+    text-shadow: 2px 2px 5px #ff6f00;
+  }
+  #timer {
+    font-size: 22px;
+    color: #f7d794;
+    text-shadow: 1px 1px 3px #ffa502;
+  }
+</style>
+</head>
+<body>
+
+<h1>Jogo do Alvo</h1>
+<div id="scoreboard">Pontuação: 0</div>
+<div id="timer">Tempo: 30</div>
+<div id="game-area">
+  <div id="target"></div>
+</div>
+
+<script>
+
+  const target = document.getElementById('target');
+  const scoreboard = document.getElementById('scoreboard');
+  const timerDisplay = document.getElementById('timer');
+  const gameArea = document.getElementById('game-area');
+
+  let score = 0;
+  let timeLeft = 30;
+  let timerId;
+
+  function moveTarget() {
+    const maxX = gameArea.clientWidth - target.offsetWidth;
+    const maxY = gameArea.clientHeight - target.offsetHeight;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+    target.style.left = randomX + 'px';
+    target.style.top = randomY + 'px';
+  }
+
+  
+  function updateScore() {
+    scoreboard.textContent = 'Pontuação: ' + score;
+  }
+
+  
+  function countdown() {
+    timeLeft--;
+    timerDisplay.textContent = 'Tempo: ' + timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timerId);
+      target.style.display = 'none';
+      alert('Fim do jogo! Sua pontuação final foi: ' + score);
+    }
+  }
+
+  
+  target.addEventListener('click', () => {
+    score++;
+    updateScore();
+    moveTarget();
+  });
+
+  
+  moveTarget();
+  updateScore();
+  timerId = setInterval(countdown, 1000);
+</script>
+
+</body>
+</html>
